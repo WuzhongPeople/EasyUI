@@ -1,0 +1,23 @@
+[{
+  "id":1,
+  "text":"根类",
+  "attributes":{"url":""},
+  "children":[{
+    "id":11,
+    "text":"系统类",
+    "attributes":{"url":""},
+    "children":[{
+      "id":110,
+      "text":"操作类",
+      "attributes":{"url":"manage/class/class.html"}
+    },{
+      "id":112,
+      "text":"模块类",
+      "attributes":{"url":"manage/class/class.html"}
+    },{
+      "id":113,
+      "text":"人员类",
+      "attributes":{"url":"../DataGrid/DataGrid.html"}
+    }]
+  }]
+  }]

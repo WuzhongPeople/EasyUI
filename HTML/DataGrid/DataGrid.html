@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入EasyUI的核心UIcss样式文件-->
+    <link rel="stylesheet" type="text/css"  href="../../easyui/themes/default/easyui.css">
+    <!-- 引入EasyUI的图标样式文件-->
+    <link rel="stylesheet" type="text/css" href="../../easyui/themes/icon.css">
+    <!-- 引入JQuery的核心库 -->
+    <script type="text/javascript" src="../../easyui/jquery.min.js"></script>
+    <!-- 引入EasyUI的核心库 -->
+    <script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+    <!-- 引入EasyUI的中文国际化js，让EasyUI支持中文,可选，官网教程无 -->
+    <script type="text/javascript"  src="../../easyui/locale/easyui-lang-zh_CN.js"></script>
+    <!-- 引入自定义js文件-->
+    <script type="text/javascript" src="DataGrid.js"></script>
+
+</head>
+<body>
+<!--- table标签class加载方式
+<table class="easyui-datagrid">
+    <thead>
+    <tr>
+        <th data-options="field:'code'">编码</th>
+        <th data-options="field:'name'">名称</th>
+        <th data-options="field:'price'">价格</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>001</td><td>name1</td><td>2323</td>
+    </tr>
+    <tr>
+        <td>002</td><td>name2</td><td>4612</td>
+    </tr>
+    </tbody>
+</table>
+--->
+
+<!-- js加载方式 -->
+<table id="dg"
+       class="easyui-datagrid"
+       toolbar="#toolbar"
+       fit="true"
+       rownumbers="true" fitColumns="true" singleSelect="false"
+></table>
+<!--
+<div id="toolbar">
+-->
+<!--
+   <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dg').edatagrid('addRow')">添加</a>
+   <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:$('#dg').edatagrid('destroyRow')">删除</a>
+   <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="javascript:$('#dg').edatagrid('saveRow')">保存</a>
+   <a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="javascript:$('#dg').edatagrid('cancelRow')">取消</a>
+</div>
+-->
+<div id="toolbar">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">添加</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">编辑</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">删除</a>
+</div>
+
+<!-- 创使用相同的对话框来创建或编辑用户-->
+<div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px" closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">用户信息</div>
+    <form id="fm" method="post">
+        <div class="fitem">
+            <label>First Name:</label>
+            <input name="firstname" class="easyui-validatebox" required="true">
+        </div>
+        <div class="fitem">
+            <label>Last Name:</label>
+            <input name="lastname" class="easyui-validatebox" required="true">
+        </div>
+        <div class="fitem">
+            <label>Phone:</label>
+            <input name="phone">
+        </div>
+        <div class="fitem">
+            <label>Email:</label>
+            <input name="email" class="easyui-validatebox" validType="email">
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUser()">Save</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+</div>
+<script type="text/javascript">
+
+    //当创建用户时，打开一个对话框并清空表单数据
+    function newUser(){
+        $('#dlg').dialog('open').dialog('setTitle','添加');
+        $('#fm').form('clear');
+        url='save_user.php';
+    }
+
+    //当编辑用户时，打开一个对话框并从datagrid选择的行中加载表单数据
+    var row=$('#dg').datagrid('getSelected');
+    if(row){
+        $('#dlg').dialog('open').dialog('setTitle','编辑');
+        $('#fm').form('load',row);
+        //'url' 存储着当保存用户数据时表单回传的 URL 地址。
+        url='update_user.php?id='+row.id;
+    }
+
+    //保存用户数据
+    function saveUser(){
+        //提交表单之前，'onSubmit' 函数将被调用，该函数用来验证表单字段值。当表单字段值提交成功，关闭对话框并重新加载 datagrid 数据。
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $('#dlg').dialog('close');		// close the dialog
+                    $('#dg').datagrid('reload');	// reload the user data
+                }
+            }
+        });
+    }
+
+    //删除一个用户数据
+    function destroyUser(){
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            $.messager.confirm('确认','你想删除所选数据吗?',function(r){
+                if (r){
+                    $.post('destroy_user.php',{id:row.id},function(result){
+                        if (result.success){
+                            $('#dg').datagrid('reload');	// reload the user data
+                        } else {
+                            $.messager.show({	// show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    },'json');
+                }
+            });
+        }
+    }
+
+</script>
+</body>
+</html>

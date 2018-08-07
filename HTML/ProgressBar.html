@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入EasyUI的核心UIcss样式文件-->
+    <link rel="stylesheet" type="text/css"  href="../easyui/themes/default/easyui.css">
+    <!-- 引入EasyUI的图标样式文件-->
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+    <!-- 引入JQuery的核心库 -->
+    <script type="text/javascript" src="../easyui/jquery.min.js"></script>
+    <!-- 引入EasyUI的核心库 -->
+    <script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+    <!-- 引入EasyUI的中文国际化js，让EasyUI支持中文,可选，官网教程无 -->
+    <script type="text/javascript"  src="../easyui/locale/easyui-lang-zh_CN.js"></script>
+
+</head>
+<body>
+<a>使用HTML标签或程序创建进度条组件，从标签创建更加简单，添加‘easyui-progressbar’类ID到《/div》标签</a>
+<div id="p1" class="easyui-progressbar" data-option="value:60" style="width: 400px;"></div>
+
+
+<a>使用javascript创建进度条</a>
+<div id="p" style="width:400px;"></div>
+<input id="startID" type="button" value="开始" style="width:100px;height: 30px" />
+
+<script type="text/javascript">
+    $("#p").progressbar({
+        width:1000,
+        height:40,
+        value:0
+    });
+
+    //获取1-9之间的随机数
+    function getNum(){
+        return Math.floor(Math.random()*9)+1;
+    }
+
+    /* for(var i=0;i<20;i++){
+        var num=getNum();
+        document.write(num+"<br />");
+    } */
+    var timeID=null;
+    function update(){
+        //获取随机值
+
+        var num=getNum();
+        //获取进度条当前值
+        var value=$("#p").progressbar("getValue");
+        if(value+num>100){
+            //设置进度条当前值为100，且停止运行
+            $("#p").progressbar("setValue",100);
+            window.clearInterval(timeID);
+            $("#startID").removeAttr("disabled");
+        }else{
+            $("#p").progressbar("setValue",(value+num))
+        }
+    }
+
+
+    $("#startID").click(function(){
+        timeID=window.setInterval("update()",500);
+        //按钮失效
+        $(this).attr("disabled","disabled");
+    });
+</script>
+</body>
+</html>

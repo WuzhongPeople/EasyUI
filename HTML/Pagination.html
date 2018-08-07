@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入EasyUI的核心UIcss样式文件-->
+    <link rel="stylesheet" type="text/css"  href="../easyui/themes/default/easyui.css">
+    <!-- 引入EasyUI的图标样式文件-->
+    <link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+    <!-- 引入JQuery的核心库 -->
+    <script type="text/javascript" src="../easyui/jquery.min.js"></script>
+    <!-- 引入EasyUI的核心库 -->
+    <script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+    <!-- 引入EasyUI的中文国际化js，让EasyUI支持中文,可选，官网教程无 -->
+    <script type="text/javascript"  src="../easyui/locale/easyui-lang-zh_CN.js"></script>
+
+</head>
+<body>
+<a>使用标签创建分页控件</a>
+<div
+    id="pagination"
+    class="easyui-pagination"
+    data-options="total:2000,pageSize:10"
+    style="background: #efefef;border: 1px solid #ccc;"
+></div>
+
+<a>使用javascript创建分页控件</a>
+<div id="pp" style="background: #efefef;border:1px solid #ccc;"></div>
+<script>
+    $("#pp").pagination({
+        "total":2000, //表示总记录数，在分页控件创建时初始的值
+        "pageSize":10, //每页显示多少条记录
+        "pageNumber":2, //在分页控件创建的时候显示的页数
+        "buttons":[{
+            iconCls:'icon-add',
+        },'-',{
+            iconCls:'icon-edit',
+        }],
+        "pageList":[10,20,50,100],//用户可以改变页面大小。pageList属性定义了页面导航展示的页码（默认值是10，20，30，50）
+
+    });
+
+</script>
+</body>
+</html>

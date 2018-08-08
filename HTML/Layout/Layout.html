@@ -25,10 +25,22 @@
          text-align:center">
          xxx管理系统
     </div>
-    <div data-options="region:'west',split:true,title:'导航菜单'"
+    <div data-options="region:'west',split:true,title:'功能菜单'"
          style="width:150px;
          padding:10px;">
-        <ul id="tt"></ul>
+
+        <!-- easyui-accordion分类菜单-->
+        <div id="aa" class="easyui-accordion" fit="true" border="true" animate="true">
+            <div title="菜单管理"   style="overflow:auto;padding:1px;">
+                <ul id="tt"></ul>
+            </div>
+            <div title="用户管理"  style="padding:1px;">
+                content2
+            </div>
+            <div title="权限管理" style="padding:1px;">
+                content3
+            </div>
+        </div>
     </div>
     <div data-options="region:'east',split:true,collapsed:true,title:'东部'"
          style="width:100px;padding:10px;">
